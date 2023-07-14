@@ -1,4 +1,23 @@
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+
+type Inputs = {
+  full_name: string;
+  email: string;
+  password: string;
+};
+
 const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+  };
+
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -28,7 +47,7 @@ const Register = () => {
             </a>
 
             <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-              Welcome to Squid 🦑
+              Welcome to Book Lab 🦑
             </h1>
 
             <p className="mt-4 leading-relaxed text-gray-500">
@@ -36,24 +55,29 @@ const Register = () => {
               nam dolorum aliquam, quibusdam aperiam voluptatum.
             </p>
 
-            <form action="#" className="mt-8 grid grid-cols-6 gap-6">
-              <div className="col-span-6 sm:col-span-3">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              action="#"
+              className="mt-8 grid grid-cols-6 gap-6"
+            >
+              <div className="col-span-6">
                 <label
                   htmlFor="FirstName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  First Name
+                  Full Name
                 </label>
 
                 <input
                   type="text"
                   id="FirstName"
-                  name="first_name"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  {...register("full_name", { required: true })}
                 />
+                {errors.full_name && <span>This field is required</span>}
               </div>
 
-              <div className="col-span-6 sm:col-span-3">
+              {/* <div className="col-span-6 sm:col-span-3">
                 <label
                   htmlFor="LastName"
                   className="block text-sm font-medium text-gray-700"
@@ -67,7 +91,7 @@ const Register = () => {
                   name="last_name"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 />
-              </div>
+              </div> */}
 
               <div className="col-span-6">
                 <label
@@ -80,12 +104,13 @@ const Register = () => {
                 <input
                   type="email"
                   id="Email"
-                  name="email"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  {...register("email", { required: true })}
                 />
+                {errors.email && <span>This field is required</span>}
               </div>
 
-              <div className="col-span-6 sm:col-span-3">
+              <div className="col-span-6">
                 <label
                   htmlFor="Password"
                   className="block text-sm font-medium text-gray-700"
@@ -96,12 +121,13 @@ const Register = () => {
                 <input
                   type="password"
                   id="Password"
-                  name="password"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  {...register("password", { required: true })}
                 />
+                {errors.password && <span>This field is required</span>}
               </div>
 
-              <div className="col-span-6 sm:col-span-3">
+              {/* <div className="col-span-6 sm:col-span-3">
                 <label
                   htmlFor="PasswordConfirmation"
                   className="block text-sm font-medium text-gray-700"
@@ -115,7 +141,7 @@ const Register = () => {
                   name="password_confirmation"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 />
-              </div>
+              </div> */}
 
               <div className="col-span-6">
                 <label htmlFor="MarketingAccept" className="flex gap-4">
@@ -154,9 +180,9 @@ const Register = () => {
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                   Already have an account?
-                  <a href="#" className="text-gray-700 underline">
+                  <Link to="/login" className="text-gray-700 underline">
                     Log in
-                  </a>
+                  </Link>
                   .
                 </p>
               </div>
