@@ -1,22 +1,49 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useRegisterUserMutation } from "../../../redux/features/auth/auth-api";
 
-type Inputs = {
+export type Inputs = {
   full_name: string;
   email: string;
   password: string;
 };
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+  const [
+    userRegister,
+    { isLoading, isError, isSuccess, error, data: userData },
+  ] = useRegisterUserMutation();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const options: Inputs = {
+      full_name: data.full_name,
+      email: data.email,
+      password: data.password,
+    };
+    await userRegister(options);
   };
+
+  if (isSuccess) {
+    navigate("/home");
+  } else if (isError) {
+    console.log(error);
+  } else if (userData) {
+    console.log(userData);
+  } else if (isLoading) {
+    console.log("Loading...");
+  } else {
+    console.log("Something went wrong");
+  }
+
+  console.log(isError, isSuccess, userData, isLoading);
 
   return (
     <section className="bg-white">
@@ -175,7 +202,7 @@ const Register = () => {
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                 <button className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
-                  Create an account
+                  {isLoading ? "Loading..." : "Create an account"}
                 </button>
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
