@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-type IsAuth = {
+export type IsAuth = {
   isAuth: boolean;
 };
 

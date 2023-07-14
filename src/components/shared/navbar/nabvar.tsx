@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { setAuth } from "../../../redux/features/auth/auth-slice";
+import { IsAuth, setAuth } from "../../../redux/features/auth/auth-slice";
 import { useAppDispatch } from "../../../redux/hooks/hooks";
 
 const Navbar = () => {
-  const isAuth = JSON.parse(localStorage.getItem("isAuth"));
+  const isAuth: IsAuth = JSON.parse(localStorage.getItem("isAuth")!) as IsAuth;
   console.log(isAuth);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
