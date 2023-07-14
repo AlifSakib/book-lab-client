@@ -3,6 +3,8 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterUserMutation } from "../../../redux/features/auth/auth-api";
+import { setAuth } from "../../../redux/features/auth/auth-slice";
+import { useAppDispatch } from "../../../redux/hooks/hooks";
 
 export type Inputs = {
   full_name: string;
@@ -12,6 +14,7 @@ export type Inputs = {
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const {
     register,
     handleSubmit,
@@ -33,6 +36,7 @@ const Register = () => {
 
   if (isSuccess) {
     navigate("/home");
+    dispatch(setAuth(true));
   } else if (isError) {
     console.log(error);
   } else if (userData) {

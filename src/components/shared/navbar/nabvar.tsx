@@ -1,6 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { setAuth } from "../../../redux/features/auth/auth-slice";
+import { useAppDispatch } from "../../../redux/hooks/hooks";
 
 const Navbar = () => {
+  const isAuth = JSON.parse(localStorage.getItem("isAuth"));
+  console.log(isAuth);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuth");
+    dispatch(setAuth(false));
+    navigate("/home");
+  };
+
   return (
     <header className="bg-white">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -83,23 +96,38 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="sm:flex sm:gap-4">
-              <Link
-                className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
-                to="/login"
-              >
-                Login
-              </Link>
+            {isAuth ? (
+              <>
+                <div className="sm:flex sm:gap-4">
+                  <button
+                    onClick={handleLogout}
+                    className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="sm:flex sm:gap-4">
+                  <Link
+                    className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
+                    to="/login"
+                  >
+                    Login
+                  </Link>
 
-              <div className="hidden sm:flex">
-                <Link
-                  className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
-                  to="/register"
-                >
-                  Register
-                </Link>
-              </div>
-            </div>
+                  <div className="hidden sm:flex">
+                    <Link
+                      className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
+                      to="/register"
+                    >
+                      Register
+                    </Link>
+                  </div>
+                </div>
+              </>
+            )}
 
             <div className="block md:hidden">
               <button className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75">

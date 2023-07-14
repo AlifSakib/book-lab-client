@@ -1,14 +1,18 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../../../redux/features/auth/auth-api";
+import { setAuth } from "../../../redux/features/auth/auth-slice";
+import { useAppDispatch } from "../../../redux/hooks/hooks";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [loginUser, { isError, isLoading, isSuccess, data, error }] =
     useLoginUserMutation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
     await loginUser({
@@ -21,6 +25,7 @@ const Login = () => {
 
   if (isSuccess) {
     navigate("/home");
+    dispatch(setAuth(true));
   } else if (isError) {
     console.log(error);
   } else if (isLoading) {
