@@ -1,6 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../../../redux/features/auth/auth-api";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [loginUser, { isError, isLoading, isSuccess, data, error }] =
+    useLoginUserMutation();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+    await loginUser({
+      email: data.email,
+      password: data.password,
+    });
+  };
+
+  console.log({ isError, isLoading, isSuccess, data, error });
+
+  if (isSuccess) {
+    navigate("/home");
+  } else if (isError) {
+    console.log(error);
+  } else if (isLoading) {
+    console.log("Loading...");
+  } else {
+    console.log("Something went wrong");
+  }
   return (
     <section className="relative flex flex-wrap lg:h-screen lg:items-center">
       <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
@@ -13,7 +40,11 @@ const Login = () => {
           </p>
         </div>
 
-        <form action="" className="mx-auto mb-0 mt-8 max-w-md space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          action=""
+          className="mx-auto mb-0 mt-8 max-w-md space-y-4"
+        >
           <div>
             <label htmlFor="email" className="sr-only">
               Email
@@ -22,6 +53,7 @@ const Login = () => {
             <div className="relative">
               <input
                 type="email"
+                name="email"
                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Enter email"
               />
@@ -53,6 +85,7 @@ const Login = () => {
             <div className="relative">
               <input
                 type="password"
+                name="password"
                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Enter password"
               />
