@@ -1,4 +1,10 @@
+import { Link } from "react-router-dom";
+import { useGetAllBooksQuery } from "../../redux/features/book/book-api";
+
 const AllBooks = () => {
+  const { data, isLoading, isError, isFetching } =
+    useGetAllBooksQuery(undefined);
+
   return (
     <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-2xl md:px-24 lg:px-8 lg:py-20">
       <div className="flex flex-col w-full mb-6 lg:justify-between lg:flex-row md:mb-8">
@@ -41,90 +47,32 @@ const AllBooks = () => {
         </form>
       </div>
       <div className="grid gap-8 row-gap-5 mb-8 grid-cols-2 lg:grid-cols-4 lg:row-gap-8">
-        <div>
-          <img
-            className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
-            src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
-            alt=""
-          />
-          <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
-            Galaxies Orion
-          </p>
-          <p className="text-gray-700">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium.
-          </p>
-        </div>
-        <div>
-          <img
-            className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
-            src="https://images.pexels.com/photos/3182750/pexels-photo-3182750.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
-            alt=""
-          />
-          <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
-            Tunguska event
-          </p>
-          <p className="text-gray-700">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium.
-          </p>
-        </div>
-        <div>
-          <img
-            className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
-            src="https://images.pexels.com/photos/3182746/pexels-photo-3182746.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
-            alt=""
-          />
-          <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
-            Yolo ipsum dolor
-          </p>
-          <p className="text-gray-700">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium.
-          </p>
-        </div>
-        <div>
-          <img
-            className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
-            src="https://images.pexels.com/photos/3184296/pexels-photo-3184296.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
-            alt=""
-          />
-          <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
-            Curabitur mattis
-          </p>
-          <p className="text-gray-700">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium.
-          </p>
-        </div>
-        <div>
-          <img
-            className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
-            src="https://images.pexels.com/photos/3184311/pexels-photo-3184311.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500"
-            alt=""
-          />
-          <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
-            Leverage agile
-          </p>
-          <p className="text-gray-700">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium.
-          </p>
-        </div>
-        <div>
-          <img
-            className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
-            src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
-            alt=""
-          />
-          <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
-            Organically grow
-          </p>
-          <p className="text-gray-700">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium.
-          </p>
-        </div>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : isError ? (
+          <div>Error</div>
+        ) : (
+          <>
+            {data.data.data.map((book, i) => (
+              <Link to={"/"}>
+                <div key={i}>
+                  <img
+                    className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
+                    src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
+                    alt=""
+                  />
+                  <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
+                    Galaxies Orion
+                  </p>
+                  <p className="text-gray-700">
+                    Sed ut perspiciatis unde omnis iste natus error sit
+                    voluptatem accusantium.
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </>
+        )}
       </div>
       <div className="text-center">
         <a
