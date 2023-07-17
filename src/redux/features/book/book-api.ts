@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { api } from "../../api/api-slice";
 
 const bookApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllBooks: builder.query({
-      query: () => `/books/get-all-books`,
+      query: (searchText) => `/books/get-all-books?searchTerm=${searchText}`,
     }),
   }),
 });

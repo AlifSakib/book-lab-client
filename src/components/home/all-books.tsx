@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Key, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGetAllBooksQuery } from "../../redux/features/book/book-api";
 
 const AllBooks = () => {
+  const [searchText, setSearchText] = useState("");
   const { data, isLoading, isError, isFetching } =
-    useGetAllBooksQuery(undefined);
+    useGetAllBooksQuery(searchText);
 
   return (
     <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-2xl md:px-24 lg:px-8 lg:py-20">
@@ -34,16 +39,17 @@ const AllBooks = () => {
         </div>
         <form className="flex flex-col items-center lg:w-1/2 mb-4 md:flex-row ">
           <input
-            placeholder="Email"
+            onChange={(e) => setSearchText(e.target.value)}
+            placeholder="Search for a book"
             type="text"
             className="flex-grow w-full h-12 px-4 mb-3 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none md:mr-2 md:mb-0 focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
           />
-          <button
+          {/* <button
             type="submit"
             className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md md:w-auto bg-purple-400 hover:bg-purple-700 focus:shadow-outline focus:outline-none"
           >
-            Subscribe
-          </button>
+            Search
+          </button> */}
         </form>
       </div>
       <div className="grid gap-8 row-gap-5 mb-8 grid-cols-2 lg:grid-cols-4 lg:row-gap-8">
@@ -53,21 +59,20 @@ const AllBooks = () => {
           <div>Error</div>
         ) : (
           <>
-            {data.data.data.map((book, i) => (
-              <Link to={"/"}>
-                <div key={i}>
+            {data.data.data.map((book: any, i: Key | null | undefined) => (
+              <Link key={i} to={"/home"}>
+                <div>
                   <img
                     className="object-cover w-full h-56 mb-6 rounded shadow-lg md:h-64 xl:h-80"
                     src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
                     alt=""
                   />
                   <p className="mb-2 text-xl font-bold leading-none sm:text-2xl">
-                    Galaxies Orion
+                    {book.title}
                   </p>
-                  <p className="text-gray-700">
-                    Sed ut perspiciatis unde omnis iste natus error sit
-                    voluptatem accusantium.
-                  </p>
+                  <p className="text-gray-700">{book.author}</p>
+                  <p className="text-gray-700">{book.genre}</p>
+                  <p className="text-gray-700">{book.publicationDate}</p>
                 </div>
               </Link>
             ))}
